@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,31 +19,25 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserRepository userRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
-        Boolean userExists = userRepository.existsByEmail(registerRequest.getEmail());
-
-        if(userExists){
-            return new ResponseEntity<>("There is already a user registered with the email provided.", HttpStatus.BAD_REQUEST);
+        try{
+            authService.signup(registerRequest);
+            return new ResponseEntity<>("User Registration Successful. Please verify your email.", OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
         }
-
-        authService.signup(registerRequest);
-
-        return new ResponseEntity<>("User Registration Successful. Please verify your email.", OK);
     }
 
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        String token;
-
         try {
-            token = authService.login(loginRequest);
+            String token = authService.login(loginRequest);
             return new ResponseEntity<>(token, OK);
         }catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), UNAUTHORIZED);
+            throw new ResponseStatusException(UNAUTHORIZED, e.getMessage());
         }
     }
 }

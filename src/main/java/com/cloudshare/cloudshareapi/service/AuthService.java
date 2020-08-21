@@ -15,9 +15,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 @Transactional
@@ -42,7 +45,13 @@ public class AuthService {
         this.jwtProvider = jwtProvider;
     }
 
-    public void signup(RegisterRequest registerRequest){
+    public void signup(RegisterRequest registerRequest) throws Exception {
+
+        Boolean userExists = userRepository.existsByEmail(registerRequest.getEmail());
+        if(userExists){
+            throw new Exception("There is already a user registered with the email provided.");
+        }
+
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
