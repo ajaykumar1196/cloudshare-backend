@@ -6,7 +6,6 @@ import com.cloudshare.cloudshareapi.service.AuthService;
 import com.cloudshare.cloudshareapi.service.ProfileService;
 import com.cloudshare.cloudshareapi.service.UserDetailsServiceImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
