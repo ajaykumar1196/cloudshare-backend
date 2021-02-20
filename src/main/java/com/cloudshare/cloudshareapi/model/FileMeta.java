@@ -14,13 +14,12 @@ public class FileMeta {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @JsonIgnore
+    
     @Column(name = "name")
     private String name;
 
-    @Column(name = "parent_folder")
-    private String parentFolder;
+    @Column(name = "destination")
+    private String destination;
 
     @Column(name = "type")
     private String type;
@@ -35,6 +34,7 @@ public class FileMeta {
     @Column(name = "cloud_id")
     private String cloudId;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner")
     private User owner;
@@ -51,12 +51,12 @@ public class FileMeta {
         this.name = name;
     }
 
-    public String getParentFolder() {
-        return parentFolder;
+    public String getDestination() {
+        return destination;
     }
 
-    public void setParentFolder(String parentFolder) {
-        this.parentFolder = parentFolder;
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
     public String getType() {

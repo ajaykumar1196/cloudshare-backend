@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,7 +24,7 @@ public class FileMetaService {
         this.authService = authService;
     }
 
-    public void uploadFile(FileRequest fileRequest){
+    public void uploadFile(FileRequest fileRequest) throws Exception{
         if(fileRequest.getFile().isEmpty()){
             throw new IllegalStateException("File not found");
         }
@@ -31,7 +32,7 @@ public class FileMetaService {
         String uid = UUID.randomUUID().toString();
 
         FileMeta fileMeta = fromFileRequest(fileRequest.getFile().getOriginalFilename(),
-                fileRequest.getParentFolder(), owner,
+                fileRequest.getDestination(), owner,
                 fileRequest.getFile().getSize(),
                 fileRequest.getFile().getContentType(),
                 uid);
@@ -60,16 +61,17 @@ public class FileMetaService {
                                     String type, String uid){
         FileMeta fileMeta = new FileMeta();
         fileMeta.setName(name);
-        if(parentFolder.equals("")){
-            fileMeta.setParentFolder("Home");
-        }else {
-            fileMeta.setParentFolder(parentFolder);
-        }
+        fileMeta.setDestination(parentFolder);
         fileMeta.setCreatedOn();
         fileMeta.setOwner(currentUser);
         fileMeta.setSize(size);
         fileMeta.setType(type);
         fileMeta.setCloudId(uid);
         return fileMeta;
+    }
+
+    public List<FileMeta> getAllCurrentFiles(String destination) {
+        User owner = authService.getCurrentUser();
+        return fileMetaRepository.findAllByOwnerIdAndDestination(owner.getId(), destination);
     }
 }
