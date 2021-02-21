@@ -2,12 +2,14 @@ package com.cloudshare.cloudshareapi.resource;
 
 import com.cloudshare.cloudshareapi.dto.request.DestinationFilesRequest;
 import com.cloudshare.cloudshareapi.dto.request.FileRequest;
+import com.cloudshare.cloudshareapi.dto.request.NewFolderRequest;
 import com.cloudshare.cloudshareapi.model.FileMeta;
 import com.cloudshare.cloudshareapi.service.FileMetaService;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -47,6 +49,16 @@ public class FileMetaController {
             List<FileMeta> files=  fileMetaService.getAllCurrentFiles(destinationFilesRequest.getPath());
             return new ResponseEntity<>(files, OK);
         }catch (Exception e){
+            throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/createFolder")
+    public ResponseEntity<String> createFolder(@RequestBody NewFolderRequest newFolderRequest) {
+        try {
+            FileMeta newFolder = fileMetaService.createNewFolder(newFolderRequest);
+            return new ResponseEntity<>( newFolder.getName() + "folder created successfully." , OK);
+        } catch (Exception e) {
             throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
         }
     }
