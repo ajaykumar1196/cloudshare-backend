@@ -1,17 +1,7 @@
 package com.cloudshare.cloudshareapi.dto.request;
 
-public class NewFolderRequest {
-
-    String folderName;
+public class ParentFilesRequest {
     Long parentId;
-
-    public String getFolderName() {
-        return folderName;
-    }
-
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
-    }
 
     public Long getParentId() {
         return parentId;

@@ -18,8 +18,8 @@ public class FileMeta {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "destination")
-    private String destination;
+    @Column(name = "parent")
+    private Long parentId;
 
     @Column(name = "type")
     private String type;
@@ -51,12 +51,12 @@ public class FileMeta {
         this.name = name;
     }
 
-    public String getDestination() {
-        return destination;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public String getType() {

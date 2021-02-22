@@ -34,7 +34,7 @@ public class FileMetaService {
         String uid = UUID.randomUUID().toString();
 
         FileMeta fileMeta = fromFileRequest(fileRequest.getFile().getOriginalFilename(),
-                fileRequest.getDestination(), owner,
+                fileRequest.getParentId(), owner,
                 fileRequest.getFile().getSize(),
                 fileRequest.getFile().getContentType(),
                 uid);
@@ -58,12 +58,12 @@ public class FileMetaService {
     }
 
 
-    public FileMeta fromFileRequest(String name, String parentFolder,
+    public FileMeta fromFileRequest(String name, Long parentId,
                                     User currentUser, Long size,
                                     String type, String uid){
         FileMeta fileMeta = new FileMeta();
         fileMeta.setName(name);
-        fileMeta.setDestination(parentFolder);
+        fileMeta.setParentId(parentId);
         fileMeta.setCreatedOn();
         fileMeta.setOwner(currentUser);
         fileMeta.setSize(size);
@@ -72,16 +72,16 @@ public class FileMetaService {
         return fileMeta;
     }
 
-    public List<FileMeta> getAllCurrentFiles(String destination) {
+    public List<FileMeta> getAllCurrentFiles(Long parentId) {
         User owner = authService.getCurrentUser();
-        return fileMetaRepository.findAllByOwnerIdAndDestination(owner.getId(), destination);
+        return fileMetaRepository.findAllByOwnerIdAndParentId(owner.getId(), parentId);
     }
 
     public FileMeta createNewFolder(NewFolderRequest newFolderRequest) {
         User owner = authService.getCurrentUser();
 
         FileMeta fileMeta = fromFileRequest(newFolderRequest.getFolderName(),
-                newFolderRequest.getDestinationId(),
+                newFolderRequest.getParentId(),
                 owner,
                 null,
                 "folder",

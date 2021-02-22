@@ -1,6 +1,6 @@
 package com.cloudshare.cloudshareapi.resource;
 
-import com.cloudshare.cloudshareapi.dto.request.DestinationFilesRequest;
+import com.cloudshare.cloudshareapi.dto.request.ParentFilesRequest;
 import com.cloudshare.cloudshareapi.dto.request.FileRequest;
 import com.cloudshare.cloudshareapi.dto.request.NewFolderRequest;
 import com.cloudshare.cloudshareapi.model.FileMeta;
@@ -44,9 +44,9 @@ public class FileMetaController {
     }
 
     @PostMapping(value = "/all")
-    public ResponseEntity<List<FileMeta>> getAllCurrentFiles(@RequestBody DestinationFilesRequest destinationFilesRequest){
+    public ResponseEntity<List<FileMeta>> getAllCurrentFiles(@RequestBody ParentFilesRequest parentFilesRequest){
         try{
-            List<FileMeta> files=  fileMetaService.getAllCurrentFiles(destinationFilesRequest.getPath());
+            List<FileMeta> files=  fileMetaService.getAllCurrentFiles(parentFilesRequest.getParentId());
             return new ResponseEntity<>(files, OK);
         }catch (Exception e){
             throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
@@ -57,7 +57,7 @@ public class FileMetaController {
     public ResponseEntity<String> createFolder(@RequestBody NewFolderRequest newFolderRequest) {
         try {
             FileMeta newFolder = fileMetaService.createNewFolder(newFolderRequest);
-            return new ResponseEntity<>( newFolder.getName() + "folder created successfully." , OK);
+            return new ResponseEntity<>( newFolder.getName() + " folder created successfully." , OK);
         } catch (Exception e) {
             throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
         }

@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileRequest {
 
     MultipartFile file;
-    String destination;
+    Long parentId;
 
     public MultipartFile getFile() {
         return file;
@@ -15,19 +15,19 @@ public class FileRequest {
         this.file = file;
     }
 
-    public String getDestination() {
-        return destination;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     @Override
     public String toString() {
         return "FileRequest{" +
                 "file=" + file.getOriginalFilename() +
-                ", destination='" + destination + '\'' +
+                ", parentId='" + parentId +
                 '}';
     }
 }
