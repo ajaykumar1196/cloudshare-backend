@@ -88,4 +88,9 @@ public class FileMetaService {
                 null);
         return fileMetaRepository.save(fileMeta);
     }
+
+    public List<FileMeta> getAllCurrentFolders(Long parentId) {
+        User owner = authService.getCurrentUser();
+        return fileMetaRepository.findAllByOwnerIdAndParentIdAndType(owner.getId(), parentId, "folder");
+    }
 }

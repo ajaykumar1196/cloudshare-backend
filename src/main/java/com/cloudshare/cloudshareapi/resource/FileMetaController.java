@@ -63,4 +63,14 @@ public class FileMetaController {
         }
     }
 
+    @PostMapping(value = "/allFolders")
+    public ResponseEntity<List<FileMeta>> getAllCurrentFolders(@RequestBody ParentFilesRequest parentFilesRequest){
+        try{
+            List<FileMeta> files=  fileMetaService.getAllCurrentFolders(parentFilesRequest.getParentId());
+            return new ResponseEntity<>(files, OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
+        }
+    }
+
 }

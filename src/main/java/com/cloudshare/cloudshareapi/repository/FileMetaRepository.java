@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface FileMetaRepository extends JpaRepository<FileMeta, Long> {
     List<FileMeta> findAllByOwnerIdAndParentId(Long ownerId, Long parentId);
+    List<FileMeta> findAllByOwnerIdAndParentIdAndType(Long id, Long parentId, String type);
 }
