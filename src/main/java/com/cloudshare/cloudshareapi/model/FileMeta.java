@@ -35,7 +35,7 @@ public class FileMeta {
     private String cloudId;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "owner")
     private User owner;
 

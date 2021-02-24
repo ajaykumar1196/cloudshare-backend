@@ -5,6 +5,8 @@ import com.cloudshare.cloudshareapi.dto.request.NewFolderRequest;
 import com.cloudshare.cloudshareapi.model.FileMeta;
 import com.cloudshare.cloudshareapi.model.User;
 import com.cloudshare.cloudshareapi.repository.FileMetaRepository;
+import javassist.NotFoundException;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -92,5 +94,31 @@ public class FileMetaService {
     public List<FileMeta> getAllCurrentFolders(Long parentId) {
         User owner = authService.getCurrentUser();
         return fileMetaRepository.findAllByOwnerIdAndParentIdAndType(owner.getId(), parentId, "folder");
+    }
+
+    public void deleteFile(Long id) throws IllegalArgumentException {
+        try{
+            fileMetaRepository.deleteById(id);
+        } catch (IllegalArgumentException e){
+            throw new IllegalArgumentException("Not found");
+        }
+    }
+
+    public void renameFile(Long id, String name) throws Exception {
+        if(fileMetaRepository.getOne(id) == null){
+            throw new NotFoundException("Not found");
+        }
+        FileMeta fileMeta = fileMetaRepository.getOne(id);
+        fileMeta.setName(name);
+        fileMetaRepository.save(fileMeta);
+    }
+
+    public void moveFile(Long id, Long parentId) throws Exception {
+        if(fileMetaRepository.getOne(id) == null){
+            throw new NotFoundException("Not found");
+        }
+        FileMeta fileMeta = fileMetaRepository.getOne(id);
+        fileMeta.setParentId(parentId);
+        fileMetaRepository.save(fileMeta);
     }
 }
