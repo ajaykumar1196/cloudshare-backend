@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -99,5 +100,16 @@ public class FileMetaController {
             throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
         }
     }
+
+    @GetMapping(value = "/share/{id}")
+    public ResponseEntity<String> shareFile(@PathVariable Long id){
+        try{
+            String link =  fileMetaService.createShareLink(id);
+            return new ResponseEntity<>(link, OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(BAD_REQUEST, e.getMessage());
+        }
+    }
+
 
 }

@@ -6,10 +6,8 @@ import com.cloudshare.cloudshareapi.model.FileMeta;
 import com.cloudshare.cloudshareapi.model.User;
 import com.cloudshare.cloudshareapi.repository.FileMetaRepository;
 import javassist.NotFoundException;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 
 import java.util.List;
@@ -20,11 +18,13 @@ public class FileMetaService {
 
     private final FileMetaRepository fileMetaRepository;
     private final S3Service s3Service;
+    private final FileShareService fileShareService;
     private final AuthService authService;
 
-    public FileMetaService(FileMetaRepository fileMetaRepository, S3Service s3Service, AuthService authService) {
+    public FileMetaService(FileMetaRepository fileMetaRepository, S3Service s3Service, FileShareService fileShareService, AuthService authService) {
         this.fileMetaRepository = fileMetaRepository;
         this.s3Service = s3Service;
+        this.fileShareService = fileShareService;
         this.authService = authService;
     }
 
@@ -120,5 +120,10 @@ public class FileMetaService {
         FileMeta fileMeta = fileMetaRepository.getOne(id);
         fileMeta.setParentId(parentId);
         fileMetaRepository.save(fileMeta);
+    }
+
+    public String createShareLink(Long id) throws Exception{
+        String link = fileShareService.createShareLink(id);
+        return link;
     }
 }
