@@ -1,5 +1,6 @@
 package com.cloudshare.cloudshareapi.service;
 
+import com.cloudshare.cloudshareapi.dto.response.SharedFileDetailsResponse;
 import com.cloudshare.cloudshareapi.model.FileMeta;
 import com.cloudshare.cloudshareapi.model.FileShare;
 import com.cloudshare.cloudshareapi.model.User;
@@ -48,5 +49,17 @@ public class FileShareService {
        fileShareRepository.save(fileShare);
 
        return shareId;
+    }
+
+    public SharedFileDetailsResponse sharedFileInfo(String shareId) throws Exception {
+        FileShare fileShare = fileShareRepository.findByShareId(shareId);
+        if(fileShare == null){
+            throw new Exception("Link not found.");
+        }
+        SharedFileDetailsResponse sharedFileDetailsResponse = new SharedFileDetailsResponse();
+        sharedFileDetailsResponse.setName(fileShare.getFileId().getName());
+        sharedFileDetailsResponse.setSize(fileShare.getSize());
+
+        return sharedFileDetailsResponse;
     }
 }
